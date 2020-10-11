@@ -24,6 +24,10 @@ SOFTWARE.
 */
 #endregion
 
+#define UseRunProgramDialog
+// define this to use the custom association dialog..
+//#define UseAssociationDialog
+
 using System;
 using System.Diagnostics;
 using InstallerBaseWixSharp.Files.Dialogs;
@@ -77,7 +81,12 @@ namespace InstallerBaseWixSharp
 
             project.ManagedUI.InstallDialogs.Add(Dialogs.Welcome)
                                             .Add(Dialogs.Licence)
+#if UseRunProgramDialog
                                             .Add<RunProgramDialog>()
+#endif
+#if UseAssociationDialog
+                                            .Add<AssociationsDialog>()
+#endif                                            
                                             .Add<ProgressDialog>()
                                             .Add(Dialogs.Exit);
 
