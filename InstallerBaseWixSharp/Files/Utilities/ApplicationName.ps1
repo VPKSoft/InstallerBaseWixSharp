@@ -9,7 +9,7 @@ $locale_running_ids = $languages -split ";"
 foreach ($file in $files)
 {
     Write-Output (-join("Change application name for the file: ", $file.FullName, "...")) 
-    ((Get-Content -path $file.FullName -Raw) -replace '#APPLICATION#','amp#') | Set-Content -Path $file.FullName
+    ((Get-Content -path $file.FullName -Raw) -replace '#APPLICATION#','TheApplicationName') | Set-Content -Path $file.FullName
     Write-Output (-join("File handled: ", $file.FullName, ".")) 
 }
 
