@@ -28,6 +28,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using InstallerBaseWixSharp.Files.Dialogs.DialogClasses;
 using WixSharp.UI.Forms;
 
 namespace InstallerBaseWixSharp.Files.Dialogs
@@ -48,63 +49,6 @@ namespace InstallerBaseWixSharp.Files.Dialogs
             //The incompatibility is particularly possible for the Embedded UI scenarios.
             //The safest way to avoid the problem is to compile the assembly for v3.5 Target Framework.InstallerBaseWixSharp
             InitializeComponent();
-        }
-
-        /// <summary>
-        /// A class representing a single file association.
-        /// </summary>
-        internal class FileAssociation
-        {
-            /// <summary>
-            /// Initializes a new instance of the <see cref="FileAssociation"/> class.
-            /// </summary>
-            /// <param name="extension">The extension to associate.</param>
-            /// <param name="associationName">The name of the association.</param>
-            public FileAssociation(string extension, string associationName)
-            {
-                Extension = extension;
-                AssociationName = associationName;
-            }
-
-            /// <summary>
-            /// Initializes a new instance of the <see cref="FileAssociation"/> from a specified pseudo-serialization string.
-            /// </summary>
-            /// <param name="serializeString">The pseudo-serialization string representing a <see cref="FileAssociation"/> class instance.</param>
-            /// <returns>FileAssociation.</returns>
-            public static FileAssociation FromSerializeString(string serializeString)
-            {
-                return new FileAssociation(serializeString.Split('|')[0], serializeString.Split('|')[1]);
-            }
-
-            /// <summary>
-            /// Gets or sets the extension to associate.
-            /// </summary>
-            /// <value>The extension to associate.</value>
-            public string Extension { get; set; }
-
-            /// <summary>
-            /// Gets or sets the name of the association.
-            /// </summary>
-            /// <value>The name of the association.</value>
-            public string AssociationName { get; set; }
-
-            /// <summary>
-            /// Converts this instance to a pseudo-serialization string.
-            /// </summary>
-            /// <returns>A string representing an instance of this class.</returns>
-            public string ToSerializeString()
-            {
-                return Extension + "|" + AssociationName;
-            }
-
-            /// <summary>
-            /// Returns a <see cref="System.String" /> that represents this instance.
-            /// </summary>
-            /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
-            public override string ToString()
-            {
-                return AssociationName;
-            }
         }
 
         /// <summary>
@@ -186,7 +130,6 @@ namespace InstallerBaseWixSharp.Files.Dialogs
         }
     }
 }
-
 
 
 
