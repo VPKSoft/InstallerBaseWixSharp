@@ -30,6 +30,7 @@ SOFTWARE.
 
 using System;
 using System.Diagnostics;
+using InstallerBaseWixSharp.CustomActions;
 using InstallerBaseWixSharp.Files.Dialogs;
 using WixSharp;
 using WixSharp.Forms;
@@ -47,7 +48,6 @@ namespace InstallerBaseWixSharp
 
         static void Main()
         {
-
             var project = new ManagedProject("#APPLICATION#",
                 new Dir(InstallDirectory,
                     new WixSharp.Files(@"..\#APPLICATION#\bin\Release\*.*"),
@@ -58,7 +58,10 @@ namespace InstallerBaseWixSharp
                     {
                         WorkingDirectory = "[INSTALLDIR]", IconFile = ApplicationIcon
                     }),
-                new CloseApplication($"[INSTALLDIR]{Executable}", true))
+                new CloseApplication($"[INSTALLDIR]{Executable}", true), 
+                new Property("Executable", Executable),
+                new Property("AppName", AppName),
+                new Property("Company", Company))
             {
                 GUID = new Guid("3E320290-4AB2-4DA5-9F90-C3C775EDA03C"),
                 ManagedUI = new ManagedUI(),
@@ -73,7 +76,7 @@ namespace InstallerBaseWixSharp
             };
 
             project.Package.Name = $"Installer for the {AppName} application";
-            
+
             //project.ManagedUI = ManagedUI.Empty;    //no standard UI dialogs
             //project.ManagedUI = ManagedUI.Default;  //all standard UI dialogs
 
@@ -151,6 +154,13 @@ namespace InstallerBaseWixSharp
                 {
                     Console.WriteLine($@"Post run failed: '{ex.Message}'...");
                 }
+
+                CustomActionFileAssociate.RegisterFileTypes(e.Session);
+            }
+
+            if (e.IsUninstalling)
+            {
+                CustomActionFileAssociate.UnRegisterFileTypes(e.Session);
             }
         }
 

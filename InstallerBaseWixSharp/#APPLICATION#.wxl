@@ -604,4 +604,3 @@
     <String Id="UITextVolumeCostSize" Overridable="yes"><!-- _locID_text="UITextVolumeCostSize" _locComment="UITextVolumeCostSize" -->Disk Size</String>
     <String Id="UITextVolumeCostVolume" Overridable="yes"><!-- _locID_text="UITextVolumeCostVolume" _locComment="UITextVolumeCostVolume" -->Volume</String>
 </WixLocalization>
-

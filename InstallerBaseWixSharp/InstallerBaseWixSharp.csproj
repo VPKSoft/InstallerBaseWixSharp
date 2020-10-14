@@ -35,9 +35,7 @@
     <Reference Include="System.Data.DataSetExtensions" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Files\Dialogs\AssociationsDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Update="Files\Dialogs\AssociationsDialog.cs" />
     <Compile Update="Files\Dialogs\RunProgramDialog - Copy.Designer.cs">
       <DependentUpon>RunProgramDialog.cs</DependentUpon>
     </Compile>
