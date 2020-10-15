@@ -604,10 +604,16 @@
     <String Id="UITextVolumeCostSize" Overridable="yes"><!-- _locID_text="UITextVolumeCostSize" _locComment="UITextVolumeCostSize" -->Disk Size</String>
     <String Id="UITextVolumeCostVolume" Overridable="yes"><!-- _locID_text="UITextVolumeCostVolume" _locComment="UITextVolumeCostVolume" -->Volume</String>
 
+    <!-- the run installed program dialog -->
     <String Id="RunProgramDlg_Title" Overridable="yes">[ProductName] Setup</String>
     <String Id="RunProgramDlg_RunTitle" Overridable="yes">Run [ProductName]</String>
     <String Id="RunProgramDlg_RunText" Overridable="yes">Run the application after install</String>
     <String Id="RunProgramDlg_CheckBox" Overridable="yes">Start [ProductName]</String>
+
+    <String Id="AssociationDlg_Title" Overridable="yes">[ProductName] Setup</String>
+    <String Id="AssociationDlg_TextBold" Overridable="yes">File Associations</String>
+    <String Id="AssociationDlg_Text" Overridable="yes">Select file associations</String>
+    <String Id="AssociationDlg_AssociationsAll" Overridable="yes">Select all associations</String>
 
     <!--this is required for the dialogs after the install phase..-->
     <String Id="ProductName" Overridable="yes">#APPLICATION#</String>

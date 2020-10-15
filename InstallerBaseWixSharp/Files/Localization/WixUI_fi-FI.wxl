@@ -601,10 +601,16 @@
     <String Id="UITextVolumeCostSize" Overridable="yes">Levyn koko</String>
     <String Id="UITextVolumeCostVolume" Overridable="yes">Levyasema</String>
 
+    <!-- the run installed program dialog -->
     <String Id="RunProgramDlg_Title" Overridable="yes">Tuotteen [ProductName] asennus</String>
     <String Id="RunProgramDlg_RunTitle" Overridable="yes">Suorita [ProductName]</String>
     <String Id="RunProgramDlg_RunText" Overridable="yes">Suorita sovellus asennuksen jälkeen</String>
     <String Id="RunProgramDlg_CheckBox" Overridable="yes">Suorita [ProductName]</String>
+
+    <String Id="AssociationDlg_Title" Overridable="yes">Tuotteen [ProductName] asennus</String>
+    <String Id="AssociationDlg_TextBold" Overridable="yes">Tiedostojen sidokset</String>
+    <String Id="AssociationDlg_Text" Overridable="yes">Valitse tiedostojen sidokset</String>
+    <String Id="AssociationDlg_AssociationsAll" Overridable="yes">Valitse kaikki tiedostosidokset</String>
 
     <!--this is required for the dialogs after the install phase..-->
     <String Id="ProductName" Overridable="yes">#APPLICATION#</String>

@@ -30,8 +30,8 @@ SOFTWARE.
 
 using System;
 using System.Diagnostics;
-using InstallerBaseWixSharp.CustomActions;
 using InstallerBaseWixSharp.Files.Dialogs;
+using InstallerBaseWixSharp.Registry;
 using WixSharp;
 using WixSharp.Forms;
 using File = WixSharp.File;
@@ -107,6 +107,21 @@ namespace InstallerBaseWixSharp
             project.BackgroundImage = @"Files\install_side.png";
             project.LicenceFile = @"Files\MIT.License.rtf";
 
+            project.AfterInstall += delegate(SetupEventArgs args)
+            {
+                if (args.IsUninstalling)
+                {
+                    FileAssociate.UnRegisterFileTypes(AppName, Company);
+                    FileAssociate.DeleteCompanyKeyIfEmpty(Company);
+                }
+
+                if (args.IsInstalling)
+                {
+                    FileAssociate.RegisterFileTypes(AppName, Company, Executable,
+                        args.Session.Property("ASSOCIATIONS"));
+                }
+            };
+
             project.Load += Msi_Load;
             project.BeforeInstall += Msi_BeforeInstall;
             project.AfterInstall += Msi_AfterInstall;
@@ -154,13 +169,6 @@ namespace InstallerBaseWixSharp
                 {
                     Console.WriteLine($@"Post run failed: '{ex.Message}'...");
                 }
-
-                CustomActionFileAssociate.RegisterFileTypes(e.Session);
-            }
-
-            if (e.IsUninstalling)
-            {
-                CustomActionFileAssociate.UnRegisterFileTypes(e.Session);
             }
         }
 
@@ -179,4 +187,5 @@ namespace InstallerBaseWixSharp
         }
     }
 }
+
 

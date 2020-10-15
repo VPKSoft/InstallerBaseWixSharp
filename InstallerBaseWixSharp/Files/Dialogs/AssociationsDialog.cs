@@ -75,6 +75,7 @@ namespace InstallerBaseWixSharp.Files.Dialogs
             }
 
             Associations = Associations.OrderBy(f => f.AssociationName).ToList();
+            clbFileAssociations.Items.AddRange(Associations.ToArray());
         }
 
         void back_Click(object sender, EventArgs e)
@@ -91,12 +92,14 @@ namespace InstallerBaseWixSharp.Files.Dialogs
                 var associationsPropertyValue = string.Empty;
                 try
                 {
-                    string.Join(";", Associations.Select(f => f.ToSerializeString()));
+                    associationsPropertyValue = string.Join(";", Associations.Select(f => f.ToSerializeString()));
                 }
-                catch
+                catch (Exception ex)
                 {
-                    // ignored..
+                    MessageBox.Show(ex.Message);
                 }
+
+                MessageBox.Show(associationsPropertyValue);
 
                 MsiRuntime.Session["ASSOCIATIONS"] = associationsPropertyValue;
             }
@@ -123,30 +126,23 @@ namespace InstallerBaseWixSharp.Files.Dialogs
 
         private void clbFileAssociations_ItemCheck(object sender, ItemCheckEventArgs e)
         {
-            var allChecked = clbFileAssociations.CheckedIndices.Count == clbFileAssociations.Items.Count;
+            var checkedIndices = clbFileAssociations.CheckedIndices.Cast<int>().ToList();
+
+            if (e.NewValue == CheckState.Checked)
+            {
+                checkedIndices.Add(e.Index);
+            }
+
+            if (e.NewValue == CheckState.Unchecked)
+            {
+                checkedIndices.Remove(e.Index);
+            }
+
+            var allChecked = clbFileAssociations.Items.Count == checkedIndices.Count;
+
             cbCheckAll.CheckStateChanged -= cbCheckAll_CheckedChanged;
             cbCheckAll.Checked = allChecked;
             cbCheckAll.CheckStateChanged += cbCheckAll_CheckedChanged;
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

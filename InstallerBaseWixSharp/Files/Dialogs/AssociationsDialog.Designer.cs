@@ -31,7 +31,7 @@ namespace InstallerBaseWixSharp.Files.Dialogs
             this.banner = new System.Windows.Forms.PictureBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lbFileAssociationTitle = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.back = new System.Windows.Forms.Button();
             this.next = new System.Windows.Forms.Button();
@@ -58,7 +58,7 @@ namespace InstallerBaseWixSharp.Files.Dialogs
             this.panel2.BackColor = System.Drawing.SystemColors.Control;
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel2.Controls.Add(this.label2);
-            this.panel2.Controls.Add(this.label1);
+            this.panel2.Controls.Add(this.lbFileAssociationTitle);
             this.panel2.Controls.Add(this.banner);
             this.panel2.Location = new System.Drawing.Point(-5, -5);
             this.panel2.Name = "panel2";
@@ -76,16 +76,16 @@ namespace InstallerBaseWixSharp.Files.Dialogs
             this.label2.TabIndex = 1;
             this.label2.Text = "[AssociationDlg_Text]";
             // 
-            // label1
+            // lbFileAssociationTitle
             // 
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.White;
-            this.label1.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(16, 8);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(169, 14);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "[AssociationDlg_TextBold]";
+            this.lbFileAssociationTitle.AutoSize = true;
+            this.lbFileAssociationTitle.BackColor = System.Drawing.Color.White;
+            this.lbFileAssociationTitle.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbFileAssociationTitle.Location = new System.Drawing.Point(16, 8);
+            this.lbFileAssociationTitle.Name = "lbFileAssociationTitle";
+            this.lbFileAssociationTitle.Size = new System.Drawing.Size(169, 14);
+            this.lbFileAssociationTitle.TabIndex = 1;
+            this.lbFileAssociationTitle.Text = "[AssociationDlg_TextBold]";
             // 
             // panel1
             // 
@@ -137,11 +137,11 @@ namespace InstallerBaseWixSharp.Files.Dialogs
             this.cbCheckAll.AutoSize = true;
             this.cbCheckAll.Checked = true;
             this.cbCheckAll.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbCheckAll.Location = new System.Drawing.Point(15, 77);
+            this.cbCheckAll.Location = new System.Drawing.Point(15, 267);
             this.cbCheckAll.Name = "cbCheckAll";
-            this.cbCheckAll.Size = new System.Drawing.Size(168, 17);
+            this.cbCheckAll.Size = new System.Drawing.Size(179, 17);
             this.cbCheckAll.TabIndex = 11;
-            this.cbCheckAll.Text = "[AssociationDlg_Associations]";
+            this.cbCheckAll.Text = "[AssociationDlg_AssociationsAll]";
             this.cbCheckAll.UseVisualStyleBackColor = true;
             this.cbCheckAll.CheckedChanged += new System.EventHandler(this.cbCheckAll_CheckedChanged);
             // 
@@ -152,9 +152,10 @@ namespace InstallerBaseWixSharp.Files.Dialogs
             | System.Windows.Forms.AnchorStyles.Right)));
             this.clbFileAssociations.CheckOnClick = true;
             this.clbFileAssociations.FormattingEnabled = true;
-            this.clbFileAssociations.Location = new System.Drawing.Point(15, 100);
+            this.clbFileAssociations.IntegralHeight = false;
+            this.clbFileAssociations.Location = new System.Drawing.Point(15, 74);
             this.clbFileAssociations.Name = "clbFileAssociations";
-            this.clbFileAssociations.Size = new System.Drawing.Size(462, 180);
+            this.clbFileAssociations.Size = new System.Drawing.Size(462, 187);
             this.clbFileAssociations.TabIndex = 12;
             this.clbFileAssociations.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.clbFileAssociations_ItemCheck);
             // 
@@ -183,7 +184,7 @@ namespace InstallerBaseWixSharp.Files.Dialogs
         private System.Windows.Forms.PictureBox banner;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lbFileAssociationTitle;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button back;
         private System.Windows.Forms.Button next;
