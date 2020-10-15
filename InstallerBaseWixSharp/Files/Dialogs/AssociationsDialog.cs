@@ -76,6 +76,7 @@ namespace InstallerBaseWixSharp.Files.Dialogs
 
             Associations = Associations.OrderBy(f => f.AssociationName).ToList();
             clbFileAssociations.Items.AddRange(Associations.Cast<object>().ToArray());
+            CheckAllItems(true);
         }
 
         void back_Click(object sender, EventArgs e)
@@ -94,18 +95,16 @@ namespace InstallerBaseWixSharp.Files.Dialogs
                 {
                     associationsPropertyValue = string.Join(";", Associations.Select(f => f.ToSerializeString()));
                 }
-                catch (Exception ex)
+                catch
                 {
-                    MessageBox.Show(ex.Message);
+                    // ignored..
                 }
-
-                MessageBox.Show(associationsPropertyValue);
 
                 MsiRuntime.Session["ASSOCIATIONS"] = associationsPropertyValue;
             }
-            catch (Exception ex)
+            catch
             {
-                MessageBox.Show(ex.Message);
+                // ignored..
             }
             Shell.GoNext();
         }
@@ -115,13 +114,18 @@ namespace InstallerBaseWixSharp.Files.Dialogs
             Shell.Cancel();
         }
 
-        private void cbCheckAll_CheckedChanged(object sender, EventArgs e)
+        private void CheckAllItems(bool check)
         {
-            var check = ((CheckBox) sender).Checked;
             for (var i = 0; i < clbFileAssociations.Items.Count; i++)
             {
                 clbFileAssociations.SetItemChecked(i, check);
             }
+        }
+
+        private void cbCheckAll_CheckedChanged(object sender, EventArgs e)
+        {
+            var check = ((CheckBox) sender).Checked;
+            CheckAllItems(check);
         }
 
         private void clbFileAssociations_ItemCheck(object sender, ItemCheckEventArgs e)
