@@ -45,9 +45,6 @@
     </Compile>
     <None Include="Files\Localization\WixUI_en-US.wxl" />
     <None Include="Files\Localization\WixUI_fi-FI.wxl" />
-    <None Remove="wix\InstallerBaseWixSharp.g.wxs" />
-    <None Remove="wix\InstallerBaseWixSharp.g.wxs" />
-    <None Remove="wix\InstallerBaseWixSharp.g.wxs" />
     <None Include="wix\$(ProjectName).g.wxs" />
     <Compile Update="Files\Dialogs\RunProgramDialog.cs" />
     <Compile Update="Files\Dialogs\RunProgramDialog.Designer.cs">
