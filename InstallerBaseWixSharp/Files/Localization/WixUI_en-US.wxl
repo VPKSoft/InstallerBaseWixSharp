@@ -615,6 +615,9 @@
     <String Id="AssociationDlg_Text" Overridable="yes">Select file associations</String>
     <String Id="AssociationDlg_AssociationsAll" Overridable="yes">Select all associations</String>
 
+    <!-- txt file association -->
+    <String Id="AssociationDlg_Association_0" Overridable="yes">text files</String>
+
     <!--this is required for the dialogs after the install phase..-->
     <String Id="ProductName" Overridable="yes">#APPLICATION#</String>
 </WixLocalization>

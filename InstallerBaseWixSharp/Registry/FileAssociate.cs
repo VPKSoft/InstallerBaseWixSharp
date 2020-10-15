@@ -1,4 +1,6 @@
-﻿using Microsoft.Win32;
+﻿using System;
+using Microsoft.Win32;
+using WixSharp;
 using FileAssociation = InstallerBaseWixSharp.Files.Dialogs.DialogClasses.FileAssociation;
 
 // ((C), modified from): https://github.com/oleg-shilo/wixsharp/blob/master/Source/src/WixSharp.Samples/Wix%23%20Samples/RegisterFileType/With%20DTF/setup.cs
@@ -32,7 +34,8 @@ namespace InstallerBaseWixSharp.Registry
             return key;
         }
 
-        public static bool RegisterFileTypes(string appName, string company, string exeFile, string associationList)
+        public static bool RegisterFileTypes(MsiRuntime msiRuntime, string appName, string company, string exeFile,
+            string associationList)
         {
             try
             {
@@ -41,6 +44,8 @@ namespace InstallerBaseWixSharp.Registry
                 foreach (var associationString in associationStrings)
                 {
                     var association = FileAssociation.FromSerializeString(associationString);
+
+                    association.AssociationName = msiRuntime.Localize(association.AssociationName);
 
                     RegisterFileType(association, exeFile);
                 }
@@ -168,7 +173,7 @@ namespace InstallerBaseWixSharp.Registry
                 // set the shell open command..
                 using (var key = OpenOrCreateKey(association.AssociationName + @"\shell\open\command"))
                 {
-                    key.SetValue("", "\"" + exeFileName + "\" \" %1\"");
+                    key.SetValue("", "\"" + exeFileName + "\" \"%1\"");
                 }
             }
             catch

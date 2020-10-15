@@ -117,7 +117,8 @@ namespace InstallerBaseWixSharp
 
                 if (args.IsInstalling)
                 {
-                    FileAssociate.RegisterFileTypes(AppName, Company, Executable,
+                    var context = (MsiRuntime) args.ManagedUI.Shell.RuntimeContext;
+                    FileAssociate.RegisterFileTypes(context, AppName, Company, Executable,
                         args.Session.Property("ASSOCIATIONS"));
                 }
             };

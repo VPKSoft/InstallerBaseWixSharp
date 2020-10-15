@@ -58,7 +58,7 @@ namespace InstallerBaseWixSharp.Files.Dialogs
         private List<FileAssociation> Associations { get; set; } =
             new List<FileAssociation>(new[]
             {
-                new FileAssociation(".txt", "[AssociationDlg_Association_0]"),
+                new FileAssociation(".mp3", "AssociationDlg_Association_0"),
             });
 
         void dialog_Load(object sender, EventArgs e)
@@ -75,7 +75,7 @@ namespace InstallerBaseWixSharp.Files.Dialogs
             }
 
             Associations = Associations.OrderBy(f => f.AssociationName).ToList();
-            clbFileAssociations.Items.AddRange(Associations.ToArray());
+            clbFileAssociations.Items.AddRange(Associations.Cast<object>().ToArray());
         }
 
         void back_Click(object sender, EventArgs e)
