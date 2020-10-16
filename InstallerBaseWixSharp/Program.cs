@@ -27,9 +27,13 @@ SOFTWARE.
 #define UseRunProgramDialog
 // define this to use the custom association dialog..
 //#define UseAssociationDialog
+// define this to use the local application data folder..
+//#define InstallLocalAppData
 
 using System;
 using System.Diagnostics;
+using System.IO;
+using System.Windows.Forms;
 using InstallerBaseWixSharp.Files.Dialogs;
 using InstallerBaseWixSharp.Registry;
 using WixSharp;
@@ -58,6 +62,10 @@ namespace InstallerBaseWixSharp
                     {
                         WorkingDirectory = "[INSTALLDIR]", IconFile = ApplicationIcon
                     }),
+#if InstallLocalAppData
+                new Dir($@"%LocalAppDataFolder%\{AppName}", new File(@"..\#APPLICATION#\settings.config")),
+#endif
+
                 new CloseApplication($"[INSTALLDIR]{Executable}", true), 
                 new Property("Executable", Executable),
                 new Property("AppName", AppName),
@@ -113,6 +121,24 @@ namespace InstallerBaseWixSharp
                 {
                     FileAssociate.UnRegisterFileTypes(AppName, Company);
                     FileAssociate.DeleteCompanyKeyIfEmpty(Company);
+
+                    #if InstallLocalAppData
+                    if (MessageBox.Show(@"Remove the application local application data and settings from the computer?",
+                        @"Remove application data", MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+                    {
+                        try
+                        {
+                            Directory.Delete(
+                                Path.Combine(Environment.GetEnvironmentVariable("LOCALAPPDATA") ?? string.Empty,
+                                    AppName), true);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
+                    }
+                    #endif
                 }
 
                 if (args.IsInstalling)
