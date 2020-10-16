@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using Microsoft.Win32;
 using WixSharp;
 using FileAssociation = InstallerBaseWixSharp.Files.Dialogs.DialogClasses.FileAssociation;
@@ -34,18 +35,26 @@ namespace InstallerBaseWixSharp.Registry
             return key;
         }
 
+        [DllImport("shell32.dll")]
+        static extern void SHChangeNotify(HChangeNotifyEventID wEventId,
+            HChangeNotifyFlags uFlags,
+            IntPtr dwItem1,
+            IntPtr dwItem2);
+
         public static bool RegisterFileTypes(string appName, string company, string exeFile,
             string associationList)
         {
             try
             {
+                var changeNotify = false;
+
                 var associationStrings = associationList.Split(';');
 
                 foreach (var associationString in associationStrings)
                 {
                     var association = FileAssociation.FromSerializeString(associationString);
 
-                    RegisterFileType(association, exeFile);
+                    changeNotify |= RegisterFileType(association, exeFile);
                 }
 
                 var appRegistryTree = @"SOFTWARE\" +
@@ -56,6 +65,14 @@ namespace InstallerBaseWixSharp.Registry
                 using (var key = OpenOrCreateKeyHKLM(appRegistryTree))
                 {
                     key.SetValue("Associations", associationList);
+                }
+
+                if (changeNotify)
+                {
+                    // ReSharper disable once CommentTypo
+                    // credits to pinvoke.net..
+                    SHChangeNotify(HChangeNotifyEventID.SHCNE_ASSOCCHANGED, HChangeNotifyFlags.SHCNF_IDLIST,
+                        IntPtr.Zero, IntPtr.Zero);
                 }
             }
             catch
@@ -114,7 +131,7 @@ namespace InstallerBaseWixSharp.Registry
             return true;
         }
 
-        private static void UnRegisterFileType(FileAssociation association)
+        private static bool UnRegisterFileType(FileAssociation association)
         {
             try
             {
@@ -123,7 +140,7 @@ namespace InstallerBaseWixSharp.Registry
                 {
                     if (key == null) // this shouldn't happen..
                     {
-                        return;
+                        return false;
                     }
 
                     // get the association value..
@@ -139,14 +156,16 @@ namespace InstallerBaseWixSharp.Registry
                     // delete the association value..
                     Microsoft.Win32.Registry.ClassesRoot.DeleteSubKeyTree(extensionAssociationName);
                 }
+
             }
             catch
             {
-                // ignored..
+                return false;
             }
+            return true;
         }
 
-        private static void RegisterFileType(FileAssociation association, string exeFileName)
+        private static bool RegisterFileType(FileAssociation association, string exeFileName)
         {
             try
             {
@@ -173,10 +192,12 @@ namespace InstallerBaseWixSharp.Registry
                 {
                     key.SetValue("", "\"" + exeFileName + "\" \"%1\"");
                 }
+
+                return true;
             }
             catch
             {
-                // ignored..
+                return false;
             }
         }
     }
