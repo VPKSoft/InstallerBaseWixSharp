@@ -34,7 +34,7 @@ namespace InstallerBaseWixSharp.Registry
             return key;
         }
 
-        public static bool RegisterFileTypes(MsiRuntime msiRuntime, string appName, string company, string exeFile,
+        public static bool RegisterFileTypes(string appName, string company, string exeFile,
             string associationList)
         {
             try
@@ -44,8 +44,6 @@ namespace InstallerBaseWixSharp.Registry
                 foreach (var associationString in associationStrings)
                 {
                     var association = FileAssociation.FromSerializeString(associationString);
-
-                    association.AssociationName = msiRuntime.Localize(association.AssociationName);
 
                     RegisterFileType(association, exeFile);
                 }

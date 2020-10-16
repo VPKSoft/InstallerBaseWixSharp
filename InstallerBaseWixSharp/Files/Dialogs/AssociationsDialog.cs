@@ -88,7 +88,7 @@ namespace InstallerBaseWixSharp.Files.Dialogs
         {
             try
             {
-                Associations = Associations.Where((association, i) => clbFileAssociations.SelectedIndices.Contains(i)).ToList();
+                Associations = Associations.Where((association, i) => clbFileAssociations.CheckedIndices.Contains(i)).ToList();
 
                 var associationsPropertyValue = string.Empty;
                 try
