@@ -28,13 +28,14 @@ SOFTWARE.
 // define this to use the custom association dialog..
 //#define UseAssociationDialog
 // define this to use the local application data folder..
-//#define InstallLocalAppData
+#define InstallLocalAppData
 
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 using InstallerBaseWixSharp.Files.Dialogs;
+using InstallerBaseWixSharp.Files.Localization.TabDeliLocalization;
 using InstallerBaseWixSharp.Registry;
 using WixSharp;
 using WixSharp.Forms;
@@ -119,12 +120,32 @@ namespace InstallerBaseWixSharp
             {
                 if (args.IsUninstalling)
                 {
+                    string locale = "en-US";
+                    try
+                    {
+                        locale = CommonCalls.GetKeyValue(Company, AppName, "LOCALE");
+                        CommonCalls.DeleteValue(Company, AppName, "LOCALE");
+                    }
+                    catch
+                    {
+                        // ignored..
+                    }
+
                     FileAssociate.UnRegisterFileTypes(AppName, Company);
-                    FileAssociate.DeleteCompanyKeyIfEmpty(Company);
+                    CommonCalls.DeleteCompanyKeyIfEmpty(Company);
 
                     #if InstallLocalAppData
-                    if (MessageBox.Show(@"Remove the application local application data and settings from the computer?",
-                        @"Remove application data", MessageBoxButtons.YesNo,
+                    var sideLocalization = new TabDeliLocalization();
+                    sideLocalization.GetLocalizedTexts(Properties.Resources.tabdeli_messages);
+
+                    var messageCaption = sideLocalization.GetMessage("txtDeleteLocalApplicationData",
+                        "Delete application data", locale);
+
+                    var messageText = sideLocalization.GetMessage("txtDeleteApplicationDataQuery",
+                        "Delete application settings and other data?", locale);
+
+                    if (MessageBox.Show(messageText,
+                        messageCaption, MessageBoxButtons.YesNo,
                         MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
                     {
                         try
@@ -145,6 +166,15 @@ namespace InstallerBaseWixSharp
                 {
                     FileAssociate.RegisterFileTypes(AppName, Company, Executable,
                         args.Session.Property("ASSOCIATIONS"));
+
+                    try
+                    {
+                        CommonCalls.SetKeyValue(Company, AppName, "LOCALE", args.Session.Property("LANGNAME"));
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
                 }
             };
 
@@ -158,7 +188,7 @@ namespace InstallerBaseWixSharp
 
             ValidateAssemblyCompatibility();
 
-            project.DefaultDeferredProperties += ",RUNEXE,PIDPARAM,ASSOCIATIONS";
+            project.DefaultDeferredProperties += ",RUNEXE,PIDPARAM,ASSOCIATIONS,LANGNAME";
 
             project.Localize();
 

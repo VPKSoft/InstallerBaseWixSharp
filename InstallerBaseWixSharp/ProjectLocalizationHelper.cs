@@ -2,7 +2,7 @@
 /*
 MIT License
 
-Copyright(c) 2019 Petteri Kautonen
+Copyright(c) 2020 Petteri Kautonen
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -43,6 +43,20 @@ namespace InstallerBaseWixSharp
         }
 
         /// <summary>
+        /// Gets the <see cref="LocalizationDataAttribute"/> attribute from a specified <see cref="SupportedLanguages"/> enumeration value.
+        /// </summary>
+        /// <param name="language">The <see cref="SupportedLanguages"/> enumeration value.</param>
+        /// <returns>A <see cref="LocalizationDataAttribute"/> for the specified <see cref="SupportedLanguages"/> enumeration value.</returns>
+        internal static LocalizationDataAttribute GetAttribute(SupportedLanguages language)
+        {
+            var type = language.GetType();
+            var info = type.GetMember(language.ToString());
+            var localizationDataAttribute = (LocalizationDataAttribute)info[0].GetCustomAttributes(typeof(LocalizationDataAttribute), false)[0];
+            return localizationDataAttribute;
+        }
+
+
+        /// <summary>
         /// Localizes the specified <see cref="ManagedProject"/> project.
         /// </summary>
         /// <param name="project">The <see cref="ManagedProject"/> project to localize.</param>
@@ -56,12 +70,16 @@ namespace InstallerBaseWixSharp
                 
                 MsiRuntime runtime = e.ManagedUI.Shell.MsiRuntime();
 
-                switch (DetectLanguage())
+
+                var language = DetectLanguage();
+                e.Session["LANGNAME"] = GetAttribute(language).Code;
+
+                switch (language)
                 {
                     case SupportedLanguages.FinnishFinland:
                         runtime.UIText.InitFromWxl(e.Session.ReadBinary("fi_FI_xsl"));
                         break;
-
+                    
                     case SupportedLanguages.EnglishUnitedStates:
                         runtime.UIText.InitFromWxl(e.Session.ReadBinary("en_US_xsl"));
                         break;
@@ -74,19 +92,3 @@ namespace InstallerBaseWixSharp
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

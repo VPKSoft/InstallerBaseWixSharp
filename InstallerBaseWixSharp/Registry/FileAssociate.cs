@@ -1,4 +1,28 @@
-﻿using System;
+﻿/*
+MIT License
+
+Copyright(c) 2020 Petteri Kautonen
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+using System;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
 using WixSharp;
@@ -17,20 +41,6 @@ namespace InstallerBaseWixSharp.Registry
             {
                 Microsoft.Win32.Registry.ClassesRoot.CreateSubKey(path);
                 key = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(path, true);
-            }
-            return key;
-        }
-
-        // ReSharper disable once InconsistentNaming
-        // ReSharper disable once UnusedMember.Local
-        // ReSharper disable once IdentifierTypo
-        private static RegistryKey OpenOrCreateKeyHKLM(string path)
-        {
-            var key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(path, true);
-            if (key == null)
-            {
-                Microsoft.Win32.Registry.LocalMachine.CreateSubKey(path);
-                key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(path, true);
             }
             return key;
         }
@@ -62,7 +72,7 @@ namespace InstallerBaseWixSharp.Registry
                                       appName;
 
                 // register the registered file types..
-                using (var key = OpenOrCreateKeyHKLM(appRegistryTree))
+                using (var key = CommonCalls.OpenOrCreateKeyHKLM(appRegistryTree))
                 {
                     key.SetValue("Associations", associationList);
                 }
@@ -82,26 +92,6 @@ namespace InstallerBaseWixSharp.Registry
             return true;
         }
 
-        public static bool DeleteCompanyKeyIfEmpty(string company)
-        {
-            try
-            {
-                var companyRegistryTree = @"SOFTWARE\" +
-                                          company;
-
-                var key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(companyRegistryTree);
-                if (key?.ValueCount == 0)
-                {
-                    Microsoft.Win32.Registry.LocalMachine.DeleteSubKeyTree(companyRegistryTree);
-                }
-            }
-            catch
-            {
-                return false;
-            }
-            return true;
-        }
-
         public static bool UnRegisterFileTypes(string appName, string company)
         {
             try
@@ -111,7 +101,7 @@ namespace InstallerBaseWixSharp.Registry
                                       appName;
 
                 // register the registered file types..
-                using (var key = OpenOrCreateKeyHKLM(appRegistryTree))
+                using (var key = CommonCalls.OpenOrCreateKeyHKLM(appRegistryTree))
                 {
                     var registryValue = key.GetValue("Associations").ToString();
                     var associationStrings = registryValue.Split(';');
@@ -131,7 +121,7 @@ namespace InstallerBaseWixSharp.Registry
             return true;
         }
 
-        private static bool UnRegisterFileType(FileAssociation association)
+        public static bool UnRegisterFileType(FileAssociation association)
         {
             try
             {
