@@ -159,6 +159,8 @@ namespace InstallerBaseWixSharp.Registry
         {
             try
             {
+                CommonCalls.DeleteAssociationKey(association.Extension);
+
                 // associate the extension to a named string value..
                 using (var key = OpenOrCreateKey(association.Extension))
                 {
@@ -192,4 +194,5 @@ namespace InstallerBaseWixSharp.Registry
         }
     }
 }
+
 
