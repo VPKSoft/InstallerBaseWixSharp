@@ -22,8 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-using System;
-using System.Windows.Forms;
 using Microsoft.Win32;
 
 namespace InstallerBaseWixSharp.Registry
@@ -123,22 +121,5 @@ namespace InstallerBaseWixSharp.Registry
         }
 
         // ReSharper disable once CommentTypo
-        /// <summary>
-        /// Deletes the file association key from the HKCR (HKey Classes Root).
-        /// </summary>
-        /// <param name="extension">The file association extension to delete.</param>
-        public static void DeleteAssociationKey(string extension)
-        {
-            try
-            {
-                MessageBox.Show(extension);
-                Microsoft.Win32.Registry.ClassesRoot.DeleteSubKeyTree(extension);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                // ignored..
-            }
-        }
     }
 }

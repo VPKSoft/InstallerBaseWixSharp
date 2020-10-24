@@ -116,6 +116,11 @@ namespace InstallerBaseWixSharp
             project.BackgroundImage = @"Files\install_side.png";
             project.LicenceFile = @"Files\MIT.License.rtf";
 
+            RegistryFileAssociation.ReportExceptionAction = delegate(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            };
+
             project.AfterInstall += delegate(SetupEventArgs args)
             {
                 if (args.IsUninstalling)
@@ -131,7 +136,7 @@ namespace InstallerBaseWixSharp
                         // ignored..
                     }
 
-                    FileAssociate.UnRegisterFileTypes(AppName, Company);
+                    RegistryFileAssociation.UnAssociateFiles(Company, AppName);
                     CommonCalls.DeleteCompanyKeyIfEmpty(Company);
 
                     #if InstallLocalAppData
@@ -164,8 +169,8 @@ namespace InstallerBaseWixSharp
 
                 if (args.IsInstalling)
                 {
-                    FileAssociate.RegisterFileTypes(AppName, Company, Executable,
-                        args.Session.Property("ASSOCIATIONS"));
+                    RegistryFileAssociation.AssociateFiles(Company, AppName, Executable,
+                        args.Session.Property("ASSOCIATIONS"), true);
 
                     try
                     {
