@@ -90,13 +90,26 @@ namespace InstallerBaseWixSharp.Registry
                     key.SetValue("Associations", associationList);
                 }
 
-                var associationStrings = associationList.Split(';');
+                var associationStrings = associationList.Split(':');
 
                 foreach (var associationString in associationStrings)
                 {
                     var associationData = associationString.Split('|');
-                    result |= Associate(applicationExecutableFile, associationData[0], applicationName, rootDefault,
-                        associationData[1]);
+
+                    if (associationData[0].StartsWith("(")) // format: (.m3u/.m3u8)|Music playlist files..
+                    {
+                        string[] innerExtensions = associationData[0].TrimStart('(').TrimEnd(')').Split('/');
+                        foreach (var innerExtension in innerExtensions)
+                        {
+                            result |= Associate(applicationExecutableFile, innerExtension, applicationName, rootDefault,
+                                associationData[1], iconIndex);
+                        }
+                    }
+                    else // format: .txt|Text files..
+                    {
+                        result |= Associate(applicationExecutableFile, associationData[0], applicationName, rootDefault,
+                            associationData[1], iconIndex);
+                    }
                 }
 
                 return result;
@@ -130,11 +143,24 @@ namespace InstallerBaseWixSharp.Registry
                 using (var key = CommonCalls.OpenOrCreateKeyHKLM(appRegistryTree))
                 {
                     var registryValue = key.GetValue("Associations").ToString();
-                    var associationStrings = registryValue.Split(';');
+                    var associationStrings = registryValue.Split(':');
 
                     foreach (var associationString in associationStrings)
                     {
-                        result |= UnAssociate(associationString.Split('|')[0], applicationName);
+                        var extension = associationString.Split('|')[0];
+
+                        if (extension.StartsWith("(")) // format: (.m3u/.m3u8)|Music playlist files..
+                        {
+                            string[] innerExtensions = extension.TrimStart('(').TrimEnd(')').Split('/');
+                            foreach (var innerExtension in innerExtensions)
+                            {
+                                result |= UnAssociate(innerExtension, applicationName);
+                            }
+                        }
+                        else // format: .txt|Text files..
+                        {
+                            result |= UnAssociate(extension, applicationName);
+                        }
                     }
 
                     valueCount = key.ValueCount;

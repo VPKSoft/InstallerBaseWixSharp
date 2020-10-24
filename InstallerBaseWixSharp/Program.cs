@@ -24,17 +24,20 @@ SOFTWARE.
 */
 #endregion
 
-#define UseRunProgramDialog
+// define this to use start application dialog..
+//#define UseRunProgramDialog
 // define this to use the custom association dialog..
 //#define UseAssociationDialog
 // define this to use the local application data folder..
-#define InstallLocalAppData
+//#define InstallLocalAppData
 
 using System;
 using System.Diagnostics;
+// ReSharper disable once RedundantUsingDirective, this depends on a compiler directive..
 using System.IO;
 using System.Windows.Forms;
 using InstallerBaseWixSharp.Files.Dialogs;
+// ReSharper disable once RedundantUsingDirective, this depends on a compiler directive..
 using InstallerBaseWixSharp.Files.Localization.TabDeliLocalization;
 using InstallerBaseWixSharp.Registry;
 using WixSharp;
@@ -169,7 +172,7 @@ namespace InstallerBaseWixSharp
 
                 if (args.IsInstalling)
                 {
-                    RegistryFileAssociation.AssociateFiles(Company, AppName, Executable,
+                    RegistryFileAssociation.AssociateFiles(Company, AppName, args.Session.Property("RUNEXE"),
                         args.Session.Property("ASSOCIATIONS"), true);
 
                     try

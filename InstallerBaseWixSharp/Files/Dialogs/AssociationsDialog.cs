@@ -55,6 +55,7 @@ namespace InstallerBaseWixSharp.Files.Dialogs
         /// Gets or sets the associations displayed by the dialog.
         /// </summary>
         /// <value>The associations displayed by the dialog.</value>
+        /// <remarks>Format for single extension: .ext. For multiple extensions: (.ext1/.ext2)</remarks>
         private List<FileAssociation> Associations { get; set; } =
             new List<FileAssociation>(new[]
             {
@@ -93,7 +94,8 @@ namespace InstallerBaseWixSharp.Files.Dialogs
                 var associationsPropertyValue = string.Empty;
                 try
                 {
-                    associationsPropertyValue = string.Join(";", Associations.Select(f => f.ToSerializeString()));
+                    // no deal with the semicolon (';') delimiter..
+                    associationsPropertyValue = string.Join(":", Associations.Select(f => f.ToSerializeString()));
                 }
                 catch
                 {
