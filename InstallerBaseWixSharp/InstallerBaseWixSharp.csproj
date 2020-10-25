@@ -87,4 +87,7 @@
     <Folder Include="Files\FileResources\" />
     <Folder Include="ApplicationSide\" />
   </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command=":: post_build.ps1" />
+  </Target>
 </Project>
