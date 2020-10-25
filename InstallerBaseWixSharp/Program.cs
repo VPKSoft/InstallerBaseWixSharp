@@ -56,6 +56,20 @@ namespace InstallerBaseWixSharp
 
         static void Main()
         {
+            string OutputFile() // get the executable file name and the version from it..
+            {
+                try
+                {
+                    var info = FileVersionInfo.GetVersionInfo(@"..\#APPLICATION#\bin\Release\" + Executable);
+                    return string.Concat(AppName, "_", info.FileMajorPart, ".", info.FileMinorPart, ".", info.FileBuildPart);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    return AppName;
+                }
+            }            
+            
             var project = new ManagedProject("#APPLICATION#",
                 new Dir(InstallDirectory,
                     new WixSharp.Files(@"..\#APPLICATION#\bin\Release\*.*"),
@@ -85,6 +99,7 @@ namespace InstallerBaseWixSharp
                     HelpLink = "https://www.vpksoft.net", 
                 },
                 Platform = Platform.x64,
+                OutFileName = OutputFile(),
             };
 
             project.Package.Name = $"Installer for the {AppName} application";

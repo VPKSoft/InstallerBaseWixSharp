@@ -24,6 +24,7 @@
     <PackageIcon>replace_this_logo.png</PackageIcon>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="*.msi" />    
     <None Remove="InstallerBaseWixSharp.msi" />
   </ItemGroup>
   <ItemGroup>
@@ -87,7 +88,4 @@
     <Folder Include="Files\FileResources\" />
     <Folder Include="ApplicationSide\" />
   </ItemGroup>
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command=":: post_build.ps1" />
-  </Target>
 </Project>
