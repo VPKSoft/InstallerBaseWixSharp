@@ -56,11 +56,13 @@ namespace InstallerBaseWixSharp
 
         static void Main()
         {
+            string appVersion = "1.0.0.0";
             string OutputFile() // get the executable file name and the version from it..
             {
                 try
                 {
                     var info = FileVersionInfo.GetVersionInfo(@"..\#APPLICATION#\bin\Release\" + Executable);
+                    appVersion = string.Concat(info.FileMajorPart, ".", info.FileMinorPart, ".", info.FileBuildPart);
                     return string.Concat(AppName, "_", info.FileMajorPart, ".", info.FileMinorPart, ".", info.FileBuildPart);
                 }
                 catch (Exception e)
@@ -101,6 +103,12 @@ namespace InstallerBaseWixSharp
                 Platform = Platform.x64,
                 OutFileName = OutputFile(),
             };
+
+            #region Upgrade
+            // the application update process..
+            project.Version = Version.Parse(appVersion);
+            project.MajorUpgrade = MajorUpgrade.Default;
+            #endregion
 
             project.Package.Name = $"Installer for the {AppName} application";
 
