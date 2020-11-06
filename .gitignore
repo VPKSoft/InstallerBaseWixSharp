@@ -351,3 +351,6 @@ MigrationBackup/
 
 #installer
 *.msi
+
+# generated Wix files
+*.g.wxs
