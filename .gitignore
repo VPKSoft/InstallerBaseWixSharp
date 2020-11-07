@@ -353,4 +353,4 @@ MigrationBackup/
 *.msi
 
 # generated Wix files
-*.g.wxs
+*[*\.]wxs
